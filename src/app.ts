@@ -2,6 +2,7 @@ import express, { Application, urlencoded } from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
 import { config } from './config/config';
+import { router } from './routes/index';
 
 class App {
     public express: Application;
@@ -36,9 +37,7 @@ class App {
     }
 
     private routes() {
-        this.express.get('/', (req, res) => {
-            res.json({ message: 'Hello World' });
-        });
+        this.express.use(router);
     }
 
 }
