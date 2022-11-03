@@ -1,6 +1,8 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import User, { IUser } from "../schemas/User";
 import bcrypt from "bcrypt";
+import { signJWT } from "../utils/signJWT";
+import { extractJWT } from "../middleware/extractJWT";
 
 class UserController {
     public async index(req: Request, res: Response) {
@@ -28,7 +30,8 @@ class UserController {
             if (user) {
                 const isValid = await bcrypt.compare(password, user.password);
                 if (isValid) {
-                    return res.json({message: "Logged in!"});
+                    const userWithoutPass = { username: user.username, email: user.email };
+                    return res.json({user: userWithoutPass, token: signJWT(user)});
                 }
                 return res.json({message: "Invalid password!"});
             } else {
@@ -37,6 +40,10 @@ class UserController {
         } catch (error) {
             return res.status(400).json({message: "Something went wrong!"});
         }
+    }
+
+    public async generate(req: Request, res: Response) {
+        return res.json({token: signJWT(req.body)});
     }
 }
 
