@@ -5,15 +5,15 @@ import { IUser } from '../schemas/User';
 /**
  @TODO
  */
-const signJWT = (user: IUser, cb: (err: Error | null, token: string | null) => void) => {
+export const signJWT = ({ username, password }: IUser) => {
     var timeSinceEpoch = new Date().getTime();
     var expirationTime = timeSinceEpoch + Number(config.token.expireTime) * 100000;
     var expirationTimeInSeconds = Math.floor(expirationTime / 1000);
 
     const token = jwt.sign(
         {
-            username: user.username,
-            password: user.password
+            username,
+            password
         },
         config.token.secret,
         {
@@ -21,6 +21,8 @@ const signJWT = (user: IUser, cb: (err: Error | null, token: string | null) => v
             expiresIn: expirationTimeInSeconds,
         }
     );
+
+    return token;
 
 
 
