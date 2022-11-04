@@ -6,13 +6,16 @@ import jwt from "jsonwebtoken";
 import { config } from "../config/config";
 
 class UserController {
+
     public async index(req: Request, res: Response) {
+
         const users = await User.find();
 
         return res.json({ users });
     }
 
     public async register(req: Request, res: Response) {
+
         const { username, password, email }: IUser = req.body;
         const hashedPass = await bcrypt.hash(password, 10);
         try {
@@ -25,6 +28,7 @@ class UserController {
     }
 
     public async login(req: Request, res: Response) {
+
         const { username, password } = req.body;
         try {
             const user = await User.findOne({ username });
@@ -48,6 +52,7 @@ class UserController {
     }
 
     public async token(req: Request, res: Response) {
+
         const { refreshToken } = req.body;
         if (refreshToken) {
             const user = await User.findOne({ refreshToken });
