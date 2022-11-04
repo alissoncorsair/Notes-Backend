@@ -2,28 +2,19 @@ import jwt from 'jsonwebtoken';
 import { config } from '../config/config';
 import { IUser } from '../schemas/User';
 
-/**
- @TODO
- */
-export const signJWT = ({ username, password }: IUser) => {
-    var timeSinceEpoch = new Date().getTime();
-    var expirationTime = timeSinceEpoch + Number(config.token.expireTime) * 100000;
-    var expirationTimeInSeconds = Math.floor(expirationTime / 1000);
+export interface IUserDTO {
+    username: string;
+    email?: string;
+    password?: string;
+}
 
-    const token = jwt.sign(
-        {
-            username,
-            password
-        },
-        config.token.secret,
-        {
-            algorithm: 'HS256',
-            expiresIn: expirationTimeInSeconds,
-        }
-    );
+export const generateAccessToken = ({ username, password, email }: IUserDTO) => {
+    return jwt.sign({ username: username, password: password, email: email }, config.token.secret, { expiresIn: '10m' });
+}
 
+export const generateRefreshToken = async (user: IUser) => {
+    const token = jwt.sign({ username: user.username, password: user.password, email: user.email }, config.token.refresh_secret);
+    user.refreshToken = token;
+    await user.save();
     return token;
-
-
-
 }
