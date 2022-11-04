@@ -9,4 +9,4 @@ userRouter.get('/', extractJWT, UserController.index);
 userRouter.post('/', UserController.register);
 userRouter.post('/login', UserController.login);
 userRouter.post('/validate', extractJWT);
-userRouter.post('/generate', UserController.generate);
+userRouter.post('/token', UserController.token);
