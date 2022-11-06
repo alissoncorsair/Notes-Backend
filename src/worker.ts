@@ -15,6 +15,8 @@ const worker = new Worker("emailQueue", async job => {
 }, {
     connection: {
         host: config.redis.host,
-        port: Number(config.redis.port)
+        port: Number(config.redis.port),
+        username: config.redis.username,
+        password: config.redis.password
     }
 });

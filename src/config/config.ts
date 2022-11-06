@@ -12,6 +12,8 @@ const MAIL_USER = process.env.MAIL_USER;
 const MAIL_PASS = process.env.MAIL_PASS;
 const REDIS_HOST = process.env.REDIS_HOST;
 const REDIS_PORT = process.env.REDIS_PORT;
+const REDIS_USERNAME = process.env.REDIS_USERNAME;
+const REDIS_PASSWORD = process.env.REDIS_PASSWORD;
 
 export const config = {
     DATABASE_URL: `mongodb+srv://${DATABASE_USERNAME}:${DATABASE_PASSWORD}@node-js.khm1gei.mongodb.net/?retryWrites=true&w=majority`,
@@ -28,6 +30,8 @@ export const config = {
     },
     redis: {
         host: REDIS_HOST,
-        port: REDIS_PORT
+        port: REDIS_PORT,
+        username: REDIS_USERNAME,
+        password: REDIS_PASSWORD
     }
 }
