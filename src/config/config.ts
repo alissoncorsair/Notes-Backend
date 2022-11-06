@@ -8,6 +8,10 @@ const SERVER_TOKEN_EXPIRETIME = process.env.SERVER_TOKEN_EXPIRETIME || 3600;
 const SERVER_TOKEN_ISSUER = process.env.SERVER_TOKEN_ISSUER || 'coolIssuer';
 const SERVER_TOKEN_SECRET = process.env.SERVER_TOKEN_SECRET || 'abrobra';
 const SERVER_REFRESH_TOKEN_SECRET = process.env.SERVER_REFRESH_TOKEN_SECRET || 'abacate';
+const MAIL_USER = process.env.MAIL_USER;
+const MAIL_PASS = process.env.MAIL_PASS;
+const REDIS_HOST = process.env.REDIS_HOST;
+const REDIS_PORT = process.env.REDIS_PORT;
 
 export const config = {
     DATABASE_URL: `mongodb+srv://${DATABASE_USERNAME}:${DATABASE_PASSWORD}@node-js.khm1gei.mongodb.net/?retryWrites=true&w=majority`,
@@ -17,5 +21,13 @@ export const config = {
         issuer: SERVER_TOKEN_ISSUER,
         secret: SERVER_TOKEN_SECRET,
         refresh_secret: SERVER_REFRESH_TOKEN_SECRET
+    },
+    mail: {
+        user: MAIL_USER,
+        pass: MAIL_PASS
+    },
+    redis: {
+        host: REDIS_HOST,
+        port: REDIS_PORT
     }
 }
