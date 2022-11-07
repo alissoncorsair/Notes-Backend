@@ -14,4 +14,4 @@ const worker = new Worker("emailQueue", async job => {
     }
 });
 
-console.log("Worker started!");
+console.log("Worker started! asap ☺");
