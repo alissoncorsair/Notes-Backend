@@ -4,6 +4,7 @@ import bcrypt from "bcrypt";
 import { generateAccessToken, generateRefreshToken, IUserDTO } from "../utils/signJWT";
 import jwt from "jsonwebtoken";
 import { config } from "../config/config";
+import emailQueue from "../queues/emailQueue";
 
 class UserController {
 
@@ -20,6 +21,10 @@ class UserController {
         const hashedPass = await bcrypt.hash(password, 10);
         try {
             const user = await User.create({ username, password: hashedPass, email });
+            await emailQueue.add('SendEmail', {
+                to: email, subject: `Bem vindo, ${username}!`, text: `<h2>Olá ${username}, obrigado por se registrar em nosso site! 😄 
+            Sua conta já está liberada para acesso.</h2>` });
+
             return res.json({ message: "User created!", user });
         } catch (error) {
             return res.status(400).json({ message: "Something went wrong!", error });
