@@ -1,13 +1,6 @@
 import { Worker } from 'bullmq';
 import { config } from './config/config';
 import MailerService from './services/MailerService';
-import { Queue } from "bullmq";
-
-const emailQueue = new Queue("emailQueue", {
-    connection: { host: config.redis.host, port: Number(config.redis.port) }
-});
-
-export default emailQueue;
 
 const worker = new Worker("emailQueue", async job => {
 
@@ -20,3 +13,5 @@ const worker = new Worker("emailQueue", async job => {
         password: config.redis.password
     }
 });
+
+console.log("Worker started!");
