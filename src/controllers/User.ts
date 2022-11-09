@@ -32,6 +32,23 @@ class UserController {
 
     }
 
+    public async update(req: Request, res: Response) {
+        const { username } = res.locals.jwt;
+        
+        const user = await User.findOne({ username });
+
+        if (user) {
+
+            User.updateOne({
+                email: req.body.email || user.email,
+            })
+            await user.save();
+            return res.json({ message: "User updated!", user });
+
+        }
+        return res.status(400).json({ message: "User not found!" });
+    }
+
     public async login(req: Request, res: Response) {
 
         const { username, password } = req.body;
