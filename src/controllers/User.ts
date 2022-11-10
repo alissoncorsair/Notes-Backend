@@ -5,6 +5,8 @@ import { generateAccessToken, generateRefreshToken, IUserDTO } from "../utils/si
 import jwt from "jsonwebtoken";
 import { config } from "../config/config";
 import emailQueue from "../queues/emailQueue";
+import UploadImageService from "../services/UploadImageService";
+import { S3Storage } from "../utils/S3Storage";
 
 class UserController {
 
@@ -20,6 +22,14 @@ class UserController {
         const { username, password, email }: IUser = req.body;
         const hashedPass = await bcrypt.hash(password, 10);
         try {
+            const emailInUse = await User.findOne({ email });
+            if (emailInUse) {
+                return res.status(400).json({ message: "Email already exists!" });
+            }
+            const usernameInUse = await User.findOne({ username });
+            if (usernameInUse) {
+                return res.status(400).json({ message: "Username already exists!" });
+            }
             const user = await User.create({ username, password: hashedPass, email });
             await emailQueue.add('SendEmail', {
                 to: email, subject: `Bem vindo, ${username}!`, text: `<h2>Olá ${username}, obrigado por se registrar em nosso site! 😄 
@@ -34,19 +44,21 @@ class UserController {
 
     public async update(req: Request, res: Response) {
         const { username } = res.locals.jwt;
-        
+
         const user = await User.findOne({ username });
 
         if (user) {
-
-            User.updateOne({
-                email: req.body.email || user.email,
-            })
+            if (req.file) {
+                console.log("tem file");
+                await UploadImageService.execute(req.file);
+                const s3 = new S3Storage();
+                const photo_url = s3.getFile(req.file.filename);
+                user.photo_url = photo_url;
+            }
             await user.save();
             return res.json({ message: "User updated!", user });
-
+            return res.status(400).json({ message: "User not found!" });
         }
-        return res.status(400).json({ message: "User not found!" });
     }
 
     public async login(req: Request, res: Response) {
@@ -57,7 +69,7 @@ class UserController {
             if (user) {
                 const isValid = await bcrypt.compare(password, user.password);
                 if (isValid) {
-                    const userWithoutPass = { username: user.username, email: user.email };
+                    const userWithoutPass = { username: user.username, email: user.email, photo_url: user.photo_url };
                     return res.json({ user: userWithoutPass, token: generateAccessToken(user), refreshToken: await generateRefreshToken(user) });
                 }
                 return res.json({ message: "Invalid password!" });

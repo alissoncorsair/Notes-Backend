@@ -38,7 +38,7 @@ export class S3Storage {
         await fs.promises.unlink(originalPath);
     }
 
-    async getFile(filename: string): Promise<string> {
+    getFile(filename: string): string {
         const url = `https://${this.bucket}.s3.amazonaws.com/${filename}`;
         return url;
     }
