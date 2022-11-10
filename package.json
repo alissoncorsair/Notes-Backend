@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "ts-node-dev ./src/server.ts",
-    "dev:queue": "ts-node-dev ./src/worker.ts",
+    "dev": "ts-node ./src/server.ts",
+    "dev:queue": "ts-node ./src/worker.ts",
     "build": "tsc",
     "run": "node ./src/dist/server.js"
   },
