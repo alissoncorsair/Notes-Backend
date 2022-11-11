@@ -7,6 +7,7 @@ import { config } from "../config/config";
 import emailQueue from "../queues/emailQueue";
 import UploadImageService from "../services/UploadImageService";
 import { S3Storage } from "../utils/S3Storage";
+import DeleteImageService from "../services/DeleteImageService";
 
 class UserController {
 
@@ -48,8 +49,8 @@ class UserController {
             if (req.file) {
                 await UploadImageService.execute(req.file);
                 const s3 = new S3Storage();
-                const photo_url = s3.getFile(req.file.filename);
-                user.photo_url = photo_url;
+                const uploadUrl = s3.getFile(req.file.filename);
+                user.photo_url = user.photo_url ? await DeleteImageService.execute(user.photo_url.split('.com/')[1]).then(() => uploadUrl) : uploadUrl;
             }
             await user.save();
             return res.json({ message: "User updated!", user });

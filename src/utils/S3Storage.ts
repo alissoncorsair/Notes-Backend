@@ -26,7 +26,7 @@ export class S3Storage {
 
         const fileContent = await fs.promises.readFile(originalPath);
 
-        this.client.putObject({
+        await this.client.putObject({
             Bucket: this.bucket,
             Key: filename,
             ACL: 'public-read',
@@ -36,6 +36,14 @@ export class S3Storage {
         .promise();
 
         await fs.promises.unlink(originalPath);
+    }
+
+    async deleteFile(filename: string): Promise<void> {
+        await this.client.deleteObject({
+            Bucket: this.bucket,
+            Key: filename,
+        })
+        .promise();
     }
 
     getFile(filename: string): string {
