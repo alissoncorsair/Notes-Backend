@@ -39,8 +39,7 @@ export class S3Storage {
     }
 
     getFile(filename: string): string {
-        const url = `https://${this.bucket}.s3.amazonaws.com/${filename}`;
-        return url;
+        return `https://${this.bucket}.s3.amazonaws.com/${filename}`;
     }
 
 }

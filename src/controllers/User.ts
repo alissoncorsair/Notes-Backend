@@ -22,13 +22,10 @@ class UserController {
         const { username, password, email }: IUser = req.body;
         const hashedPass = await bcrypt.hash(password, 10);
         try {
-            const emailInUse = await User.findOne({ email });
-            if (emailInUse) {
-                return res.status(400).json({ message: "Email already exists!" });
-            }
-            const usernameInUse = await User.findOne({ username });
-            if (usernameInUse) {
-                return res.status(400).json({ message: "Username already exists!" });
+            const emailInUse = await User.findOne({ email }) ? true : false;
+            const usernameInUse = await User.findOne({ username }) ? true : false;
+            if (emailInUse || usernameInUse) {
+                return res.status(400).json({ inUse: { email: emailInUse, username: usernameInUse } });
             }
             const user = await User.create({ username, password: hashedPass, email });
             await emailQueue.add('SendEmail', {
@@ -49,7 +46,6 @@ class UserController {
 
         if (user) {
             if (req.file) {
-                console.log("tem file");
                 await UploadImageService.execute(req.file);
                 const s3 = new S3Storage();
                 const photo_url = s3.getFile(req.file.filename);
@@ -57,8 +53,8 @@ class UserController {
             }
             await user.save();
             return res.json({ message: "User updated!", user });
-            return res.status(400).json({ message: "User not found!" });
         }
+        return res.status(400).json({ message: "User not found!" });
     }
 
     public async login(req: Request, res: Response) {
