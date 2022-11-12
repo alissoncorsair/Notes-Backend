@@ -27,7 +27,7 @@ class MailerService {
         } catch (e) {
             console.log(e);
         }
-        
+
     }
 }
 

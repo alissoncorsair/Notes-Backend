@@ -1,12 +1,16 @@
 import { Router } from 'express';
+import multer from 'multer';
+import { config } from '../../config/config';
 
 import UserController from '../../controllers/User';
 import { extractJWT } from '../../middleware/extractJWT';
 
 export const userRouter = Router();
 
+const upload = multer(config.multer);
+
 userRouter.get('/', extractJWT, UserController.index);
-userRouter.post('/', UserController.register);
+userRouter.post('/', upload.single('photo'), UserController.register);
+userRouter.put('/', extractJWT, upload.single('photo'), UserController.update);
 userRouter.post('/login', UserController.login);
-userRouter.post('/validate', extractJWT);
 userRouter.post('/token', UserController.token);
