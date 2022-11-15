@@ -30,7 +30,7 @@ class NotesController {
         } catch (e) {
             return res.status(400).json({ message: "Something went wrong!", error: e });
         }
-        
+
     }
 
     public async create(req: Request, res: Response) {
@@ -38,11 +38,9 @@ class NotesController {
         const author = res.locals.jwt.id;
         const invalid = isValid(title, content, author);
         if (Object.keys(invalid).length) {
-            console.log(invalid);
             return res.status(400).json({ error: invalid })
         }
         const note = await NoteModel.create({ title, content, author });
-        console.log(note);
         return res.status(201).json({ message: "Nota criada", data: note })
     }
 
@@ -52,8 +50,8 @@ class NotesController {
         try {
             const note = await NoteModel.findOne({ id: id });
             if (note) {
-                note.title = title ? title : note.title;
-                note.content = content ? content : content.title;
+                note.title = title || note.title;
+                note.content = content || content.title;
                 await note.save();
             }
 
