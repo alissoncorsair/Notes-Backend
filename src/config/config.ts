@@ -2,8 +2,14 @@ import dotenv from 'dotenv';
 import multer from 'multer';
 import path from 'path';
 import crypto from 'crypto';
+import fs from 'fs';
 
 const tmpFolder = path.resolve(__dirname, '..', '..', 'tmp');
+
+
+if (!fs.existsSync(tmpFolder)) {
+    fs.mkdirSync(tmpFolder);
+};
 
 dotenv.config();
 
