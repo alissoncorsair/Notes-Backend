@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "ts-node ./src/server.ts",
+    "dev": "nodemon",
     "dev:queue": "ts-node ./src/worker.ts",
+    "start": "node ./src/server.js",
     "build": "tsc",
     "run": "node ./src/dist/server.js"
   },

@@ -1,15 +1,17 @@
 import jwt from 'jsonwebtoken';
 import { config } from '../config/config';
-import { IUser } from '../schemas/User';
+import { IUser } from '../schemas/UserModel';
+import { Types } from 'mongoose';
 
 export interface IUserDTO {
+    id?: Types.ObjectId;
     username: string;
     email?: string;
     password?: string;
 }
 
-export const generateAccessToken = ({ username, password, email }: IUserDTO) => {
-    return jwt.sign({ username: username, password: password, email: email }, config.token.secret, { expiresIn: '10m' });
+export const generateAccessToken = ({ id, username, password, email }: IUserDTO) => {
+    return jwt.sign({ id, username, password, email }, config.token.secret, { expiresIn: '10m' });
 }
 
 export const generateRefreshToken = async (user: IUser) => {
