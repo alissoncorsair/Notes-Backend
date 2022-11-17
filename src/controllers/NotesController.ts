@@ -1,20 +1,19 @@
 import { Request, Response } from 'express';
 import NoteModel from '../schemas/NoteModel';
 
-type Validated = {
-    title: boolean,
-    content: boolean,
-    author: boolean
+type ValidatedInput = {
+    [index: string]: boolean
 };
+
 const isValid = (title: string, content: string, author: string): { [index: string]: string; } => {
-    const validated: Validated = {
+    const validator: ValidatedInput = {
         title: title ? true : false,
         content: content ? true : false,
         author: author ? true : false
-    }
+    };
     const invalid: { [index: string]: string } = {};
-    for (const property in validated) {
-        if (validated[property as keyof Validated] === false) {
+    for (const property in validator) {
+        if (validator[property] === false) {
             invalid[property] = `${property} is required`;
         }
     }
