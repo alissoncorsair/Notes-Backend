@@ -15,7 +15,7 @@ export const generateAccessToken = ({ id, username, password, email }: IUserDTO)
 }
 
 export const generateRefreshToken = async (user: IUser) => {
-    const token = jwt.sign({ username: user.username, password: user.password, email: user.email }, config.token.refresh_secret);
+    const token = jwt.sign({ id: user._id, username: user.username, password: user.password, email: user.email }, config.token.refresh_secret);
     user.refreshToken = token;
     await user.save();
     return token;
