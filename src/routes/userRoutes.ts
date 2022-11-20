@@ -10,7 +10,5 @@ export const userRouter = Router();
 const upload = multer(config.multer);
 
 userRouter.get('/', extractJWT, UserController.index);
-userRouter.post('/', upload.single('photo'), UserController.register);
+userRouter.post('/', extractJWT, upload.single('photo'), UserController.register);
 userRouter.put('/', extractJWT, upload.single('photo'), UserController.update);
-userRouter.post('/login', UserController.login);
-userRouter.post('/refresh-token', UserController.token);

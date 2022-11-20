@@ -37,7 +37,7 @@ class App {
     }
 
     private routes() {
-        this.express.use(router);
+        this.express.use('/api', router);
     }
 
 }

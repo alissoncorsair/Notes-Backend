@@ -55,7 +55,7 @@ class UserController {
                     user.photo_url = user.photo_url ? await DeleteImageService.execute(user.photo_url.split('.com/')[1]).then(() => uploadUrl) : uploadUrl;
                 }
                 await user.save();
-                return res.json({ message: "User updated!", user });
+                return res.json({ message: "User updated!", user: {...user.toObject(), password: undefined} });
             }
             return res.status(400).json({ message: "User not found!" });
         } catch (error) {
@@ -79,7 +79,7 @@ class UserController {
                     const userWithoutPass = { id: user.id, username: user.username, email: user.email, photo_url: user.photo_url };
                     return res.json({ user: userWithoutPass, token: generateAccessToken(user), refreshToken: await generateRefreshToken(user) });
                 }
-                return res.status(403).json({ error: "Invalid password!" });
+                return res.status(400).json({ error: "Invalid password!" });
             } else {
                 return res.status(400).json({ message: "User not found!" });
             }
