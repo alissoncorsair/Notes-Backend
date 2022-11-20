@@ -10,5 +10,4 @@ export const userRouter = Router();
 const upload = multer(config.multer);
 
 userRouter.get('/', extractJWT, UserController.index);
-userRouter.post('/', extractJWT, upload.single('photo'), UserController.register);
 userRouter.put('/', extractJWT, upload.single('photo'), UserController.update);

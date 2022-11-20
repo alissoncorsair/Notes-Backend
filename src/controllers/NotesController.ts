@@ -40,7 +40,7 @@ class NotesController {
             return res.status(400).json({ error: invalid })
         }
         const note = await NoteModel.create({ title, content, author });
-        return res.status(201).json({ message: "Nota criada", data: note })
+        return res.status(201).json({ message: "Nota criada", note })
     }
 
     public async update(req: Request, res: Response) {
@@ -64,7 +64,7 @@ class NotesController {
     public async delete(req: Request, res: Response) {
         try {
             const { id } = req.params;
-            await NoteModel.deleteOne({ id });
+            await NoteModel.findByIdAndDelete(id);
             return res.json({ message: "Nota deletada" });
         } catch (e) {
             return res.status(400).json({ error: "Ocorreu algum erro ao tentar apagar a nota" });

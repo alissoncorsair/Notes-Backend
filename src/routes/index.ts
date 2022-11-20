@@ -9,6 +9,7 @@ router.get('/', (req, res) => {
     res.json({ message: 'tô funcionando!' });
 });
 router.post('/login', UserController.login);
+router.post('/register', UserController.register);
 router.post('/token', UserController.token);
 router.use('/user', userRouter);
 router.use('/notes', notesRouter)
