@@ -12,6 +12,8 @@ COPY --chown=node:node . .
 
 RUN export $(cat .env)
 
-EXPOSE 3000
+RUN npm run build
 
-CMD ["npm","run","dev"]
+EXPOSE 3333
+
+CMD ["npm","run","start"]
