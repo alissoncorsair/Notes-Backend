@@ -25,7 +25,7 @@ class NotesController {
         // const note = await NoteModel.find().populate<{ author: IUser }>('author');
         try {
             const notes = await NoteModel.find({ author: res.locals.jwt.id });
-            return res.json({ data: notes })
+            return res.json({ notes })
         } catch (e) {
             return res.status(400).json({ message: "Something went wrong!", error: e });
         }
