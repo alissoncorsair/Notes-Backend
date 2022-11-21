@@ -24,7 +24,11 @@ class NotesController {
     public async index(req: Request, res: Response) {
         // const note = await NoteModel.find().populate<{ author: IUser }>('author');
         try {
-            const notes = await NoteModel.find({ author: res.locals.jwt.id });
+            
+            const notes = (await NoteModel.find({ author: res.locals.jwt.id })).sort((a, b) => {
+                return a.createdAt > b.createdAt ? -1 : 1
+            });
+
             return res.json({ notes })
         } catch (e) {
             return res.status(400).json({ message: "Something went wrong!", error: e });

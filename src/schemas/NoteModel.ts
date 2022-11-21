@@ -4,6 +4,8 @@ export interface INote {
     title: string,
     content: string,
     author: Types.ObjectId,
+    createdAt: Date,
+    updatedAt: Date,
     save(): Promise<INote>
 }
 
